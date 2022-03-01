@@ -18,6 +18,7 @@
 
 .u-section-1 .u-text-1 {
   font-size: 4.5rem;
+  font-style: italic;
   margin: 65px 30px 0;
 }
 
@@ -663,7 +664,7 @@
   }
 } .u-section-4 {
   background-image: none;
-  min-height: 824px;
+  min-height: 773px;
 }
 
 .u-section-4 .u-shape-1 {
@@ -674,12 +675,13 @@
 
 .u-section-4 .u-group-1 {
   width: 857px;
-  min-height: 773px;
-  margin: -276px auto 0;
+  min-height: 743px;
+  height: auto;
+  margin: -346px auto 30px;
 }
 
 .u-section-4 .u-container-layout-1 {
-  padding: 30px;
+  padding: 30px 30px 0;
 }
 
 .u-section-4 .u-text-1 {
@@ -701,13 +703,13 @@
   background-image: url("images/uday2.png");
   background-position: 50% 50%;
   text-align: start;
-  margin: 70px auto 0;
+  margin: 30px auto 0;
 }
 
 .u-section-4 .u-text-3 {
   text-align: center;
   font-weight: 700;
-  margin: 40px auto 0;
+  margin: 30px auto 0;
 }
 
 @media (max-width: 1199px) {
@@ -723,6 +725,7 @@
     min-height: 786px;
     margin-top: -297px;
     margin-bottom: 35px;
+    height: auto;
   }
 
   .u-section-4 .u-text-1 {
