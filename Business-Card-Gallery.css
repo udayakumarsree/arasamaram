@@ -1412,16 +1412,16 @@
 
 @media (max-width: 767px) {
   .u-section-11 .u-sheet-1 {
-    min-height: 2554px;
+    min-height: 3004px;
   }
 
   .u-section-11 .u-text-1 {
-    margin-top: -2220px;
+    margin-top: -1995px;
   }
 
   .u-section-11 .u-gallery-1 {
     grid-template-columns: auto;
-    margin-bottom: -2220px;
+    margin-bottom: -1995px;
     height: 2876px;
   }
 
@@ -1432,7 +1432,7 @@
 
 @media (max-width: 575px) {
   .u-section-11 .u-sheet-1 {
-    min-height: 1539px;
+    min-height: 1989px;
   }
 
   .u-section-11 .u-text-1 {
