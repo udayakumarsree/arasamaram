@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Items</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: linear-gradient(45deg, #83af83, #0b923f);
+            height: 100vh;
+            color: white;
+        }
+        label{font-size: 20pt;}
+        .item {
+            margin-bottom: 10px;
+        }
+        input[type="number"] {
+            width: 70px;
+            font-size: 20pt;
+        }
+        button {
+            width: 200px;
+            height: 50px;
+            font-size: 20pt;
+        }
+        img {
+            display:block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <img src="sdklogo.png" height="100px" />
+    </div>
+    <h1>Dec 28, 2024 - Menu</h1>
+    <form id="orderForm">
+        <div class="item">
+            <input type="checkbox" id="item1" name="item1">
+            <label for="item1">Idli (3pcs 30/-)</label>
+            <input type="number" id="quantity1" name="quantity1" min="1" placeholder="Qty" disabled>
+            <hr>
+        </div>
+        <div class="item">
+            <input type="checkbox" id="item2" name="item2">
+            <label for="item2">Sambhar (200ml 30/-)</label>
+            <input type="number" id="quantity2" name="quantity2" min="1" placeholder="Qty" disabled>
+            <hr>
+        </div>
+        <div class="item">
+            <input type="checkbox" id="item3" name="item3">
+            <label for="item3">Vadai (3pcs 15/-)</label>
+            <input type="number" id="quantity3" name="quantity3" min="1" placeholder="Qty" disabled>
+            <hr>
+        </div>
+        <div class="item">
+            <input type="checkbox" id="item4" name="item4">
+            <label for="item4">Chutney (100ml 15/-)</label>
+            <input type="number" id="quantity4" name="quantity4" min="1" placeholder="Qty" disabled>
+            <hr>
+        </div>
+        <div class="item">
+            <label for="address">House Address:</label><br>
+            <textarea id="address" name="address" rows="3" cols="30" placeholder="Enter your address"></textarea>
+        </div>
+        <div class="item">
+            <label for="notes">Notes:</label><br>
+            <textarea id="notes" name="notes" rows="3" cols="30" placeholder="Additional notes"></textarea>
+        </div>
+        <button type="button" onclick="submitOrder()">Place Order</button>
+    </form>
+
+    <script>
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const quantityInput = this.nextElementSibling.nextElementSibling;
+                quantityInput.disabled = !this.checked;
+                if (!this.checked) {
+                    quantityInput.value = '';
+                }
+            });
+        });
+
+        function submitOrder() {
+            const baseUrl = "https://wa.me/919994959363?text=";
+            let message = "";
+
+            for (let i = 1; i <= 4; i++) {
+                const checkbox = document.getElementById(`item${i}`);
+                const label = document.querySelector(`label[for="item${i}"]`).innerText;
+                const quantityInput = document.getElementById(`quantity${i}`);
+                let quantity = quantityInput.value;
+
+                if (checkbox.checked) {
+                    if (!quantity) {
+                        quantity = 1;
+                    }
+                    message += `${label}, Qty: ${quantity}\n`;
+                }
+            }
+
+            const address = document.getElementById("address").value.trim();
+            const notes = document.getElementById("notes").value.trim();
+
+            if (message) {
+			   if (address) {
+					message += `Address: ${address}\n`;
+				}
+				if (notes) {
+					message += `Notes: ${notes}\n`;
+				}
+                message = encodeURIComponent(message);
+                window.location.href = baseUrl + message;
+            } else {
+                alert("Please select at least one item, enter its quantity.");
+            }
+        }
+    </script>
+</body>
+</html>
