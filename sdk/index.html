@@ -7,76 +7,133 @@
     <title>Order Items</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background: linear-gradient(45deg, #83af83, #0b923f);
-            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #34c759, #1c7c35);
             color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
-        label{font-size: 20pt;}
+
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px 30px;
+            width: 400px;
+            text-align: center;
+        }
+
+        .container img {
+            margin-bottom: 20px;
+        }
+
+        .container h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
         .item {
-            margin-bottom: 10px;
+            text-align: left;
+            margin-bottom: 15px;
         }
+
+        .item label {
+            font-size: 18px;
+        }
+
         input[type="number"] {
-            width: 70px;
-            font-size: 20pt;
+            width: 80px;
+            font-size: 16px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-left: 10px;
         }
+
+        textarea {
+            width: calc(100% - 10px);
+            font-size: 16px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+            margin-top: 10px;
+        }
+
         button {
-            width: 200px;
-            height: 50px;
-            font-size: 20pt;
+            background-color: #0b923f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: background-color 0.3s;
         }
-        img {
-            display:block;
-            margin-left: auto;
-            margin-right: auto;
+
+        button:hover {
+            background-color: #067030;
+        }
+
+        button:disabled {
+            background-color: #999;
+            cursor: not-allowed;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #444;
         }
     </style>
 </head>
 <body>
-    <div>
-        <img src="sdklogo.png" height="100px" />
+    <div class="container">
+        <img src="sdkl.png" alt="Logo" height="100px">
+        <h1>Dec 29, 2024 - Menu</h1>
+        <form id="orderForm">
+            <div class="item">
+                <input type="checkbox" id="item1" name="item1">
+                <label for="item1">Idli (3pcs 30/-)</label>
+                <input type="number" id="quantity1" name="quantity1" min="1" placeholder="Qty" disabled>
+                <hr>
+            </div>
+            <div class="item">
+                <input type="checkbox" id="item2" name="item2">
+                <label for="item2">Sambhar (200ml 30/-)</label>
+                <input type="number" id="quantity2" name="quantity2" min="1" placeholder="Qty" disabled>
+                <hr>
+            </div>
+            <div class="item">
+                <input type="checkbox" id="item3" name="item3">
+                <label for="item3">Vadai (3pcs 15/-)</label>
+                <input type="number" id="quantity3" name="quantity3" min="1" placeholder="Qty" disabled>
+                <hr>
+            </div>
+            <div class="item">
+                <input type="checkbox" id="item4" name="item4">
+                <label for="item4">Chutney (100ml 15/-)</label>
+                <input type="number" id="quantity4" name="quantity4" min="1" placeholder="Qty" disabled>
+                <hr>
+            </div>
+            <div class="item">
+                <label for="address">House Address:</label><br>
+                <textarea id="address" name="address" rows="3" placeholder="Enter your address"></textarea>
+            </div>
+            <div class="item">
+                <label for="notes">Notes:</label><br>
+                <textarea id="notes" name="notes" rows="3" placeholder="Additional notes"></textarea>
+            </div>
+            <div>
+                <button type="button" onclick="submitOrder()">Place Order</button>
+                <button type="reset">Reset</button>
+            </div>
+        </form>
     </div>
-    <h1>Dec 29, 2024 - Menu</h1>
-    <form id="orderForm">
-        <div class="item">
-            <input type="checkbox" id="item1" name="item1">
-            <label for="item1">Idli (3pcs 30/-)</label>
-            <input type="number" id="quantity1" name="quantity1" min="1" placeholder="Qty" disabled>
-            <hr>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="item2" name="item2">
-            <label for="item2">Sambhar (200ml 30/-)</label>
-            <input type="number" id="quantity2" name="quantity2" min="1" placeholder="Qty" disabled>
-            <hr>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="item3" name="item3">
-            <label for="item3">Vadai (3pcs 15/-)</label>
-            <input type="number" id="quantity3" name="quantity3" min="1" placeholder="Qty" disabled>
-            <hr>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="item4" name="item4">
-            <label for="item4">Chutney (100ml 15/-)</label>
-            <input type="number" id="quantity4" name="quantity4" min="1" placeholder="Qty" disabled>
-            <hr>
-        </div>
-        <div class="item">
-            <label for="address">House Address:</label><br>
-            <textarea id="address" name="address" rows="3" cols="30" placeholder="Enter your address"></textarea>
-        </div>
-        <div class="item">
-            <label for="notes">Notes:</label><br>
-            <textarea id="notes" name="notes" rows="3" cols="30" placeholder="Additional notes"></textarea>
-        </div>
-	<div>
-		<button type="button" onclick="submitOrder()">Place Order</button>
-		<button type="reset">Reset</button>
-	</div>
-        
-    </form>
 
     <script>
         document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
@@ -111,16 +168,16 @@
             const notes = document.getElementById("notes").value.trim();
 
             if (message) {
-			   if (address) {
-					message += `Address: ${address}\n`;
-				}
-				if (notes) {
-					message += `Notes: ${notes}\n`;
-				}
+                if (address) {
+                    message += `Address: ${address}\n`;
+                }
+                if (notes) {
+                    message += `Notes: ${notes}\n`;
+                }
                 message = encodeURIComponent(message);
                 window.location.href = baseUrl + message;
             } else {
-                alert("Please select at least one item, enter its quantity.");
+                alert("Please select at least one item and enter its quantity.");
             }
         }
     </script>
