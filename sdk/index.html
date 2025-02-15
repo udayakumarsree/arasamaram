@@ -27,25 +27,17 @@
             width: 400px;
             text-align: center;
         }
-
-        .container img {
-            margin-bottom: 20px;
-        }
-
+        
         .container h1 {
             font-size: 24px;
             margin-bottom: 20px;
         }
-
+        
         .item {
             text-align: left;
             margin-bottom: 15px;
         }
-
-        .item label {
-            font-size: 18px;
-        }
-
+        
         input[type="number"] {
             width: 80px;
             font-size: 16px;
@@ -54,7 +46,7 @@
             border-radius: 5px;
             margin-left: 10px;
         }
-
+        
         textarea {
             width: calc(100% - 10px);
             font-size: 16px;
@@ -64,50 +56,26 @@
             resize: none;
             margin-top: 10px;
         }
-
-        button[type="button"], button[type="reset"] {
+        
+        button {
             padding: 10px 20px;
             font-size: 18px;
             cursor: pointer;
             border-radius: 5px;
-            margin: 10px 5px;
-            transition: background-color 0.3s, color 0.3s;
-            width: 100%; /* Make buttons the same width */
+            width: 100%;
+            margin: 10px 0;
         }
-
+        
         button[type="button"] {
             background-color: #0b923f;
             color: white;
             border: none;
         }
-
-        button[type="button"]:hover {
-            background-color: #067030;
-        }
-
-        button[type="button"]:disabled {
-            background-color: #999;
-            cursor: not-allowed;
-        }
-
         button[type="reset"] {
             background-color: white;
-            color: #2e8b57; /* Dark Green color */
-            border: 1px solid #2e8b57; /* Border color same as text */
+            color: #2e8b57;
+            border: 1px solid #2e8b57;
         }
-
-        button[type="reset"]:hover {
-            background-color: #2e8b57; /* Dark Green on hover */
-            color: white; /* White text on hover */
-        }
-
-        button[type="reset"]:disabled {
-            background-color: #ddd;
-            color: #aaa;
-            border: 1px solid #aaa;
-            cursor: not-allowed;
-        }
-
         hr {
             border: none;
             border-top: 1px solid #444;
@@ -117,32 +85,9 @@
 <body>
     <div class="container">
         <img src="sdkl.png" alt="Logo" height="100px">
-        <h1>Jan 3, 2025 - Menu</h1>
+        <h2 id="date"></h2>
         <form id="orderForm">
-            <div class="item">
-                <input type="checkbox" id="item1" name="item1">
-                <label for="item1">Idli (3pcs 30/-)</label>
-                <input type="number" id="quantity1" name="quantity1" min="1" placeholder="Qty">
-                <hr>
-            </div>
-            <div class="item">
-                <input type="checkbox" id="item2" name="item2">
-                <label for="item2">Sambhar (200ml 30/-)</label>
-                <input type="number" id="quantity2" name="quantity2" min="1" placeholder="Qty">
-                <hr>
-            </div>
-            <div class="item">
-                <input type="checkbox" id="item3" name="item3">
-                <label for="item3">Vadai (3pcs 15/-)</label>
-                <input type="number" id="quantity3" name="quantity3" min="1" placeholder="Qty">
-                <hr>
-            </div>
-            <div class="item">
-                <input type="checkbox" id="item4" name="item4">
-                <label for="item4">Chutney (100ml 15/-)</label>
-                <input type="number" id="quantity4" name="quantity4" min="1" placeholder="Qty">
-                <hr>
-            </div>
+            <div id="menu-container"></div>
             <div class="item">
                 <label for="address">House Address:</label><br>
                 <textarea id="address" name="address" rows="3" placeholder="Enter your address"></textarea>
@@ -151,67 +96,78 @@
                 <label for="notes">Notes:</label><br>
                 <textarea id="notes" name="notes" rows="3" placeholder="Additional notes"></textarea>
             </div>
-            <div>
-                <button type="button" onclick="submitOrder()">Place Order</button>
-                <button type="reset">Reset</button>
-            </div>
+            <button type="button" onclick="submitOrder()">Place Order</button>
+            <button type="reset">Reset</button>
         </form>
     </div>
-
     <script>
-        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                const quantityInput = this.nextElementSibling.nextElementSibling;
-                // Removed disabling logic
-            });
-        });
-
+        function loadMenu() {
+            fetch('menu.csv?' + new Date().getTime()) // Appends a unique timestamp
+                .then(response => response.text())
+                .then(data => {
+                    const lines = data.split('\n');
+                    let menuHTML = '';
+                    lines.forEach(line => {
+                        const [item, qty, price] = line.split(',');
+                        const menuline = line.split(',');
+                        //orderline = "-".join(menuline)
+                        if (item && qty && price) {
+                            menuHTML += `
+                                <div class="item">
+                                    <input type="checkbox" id="${item}" name="${item}">
+                                    <label for="${item}">${item} (${qty} - ${price}/-)</label>
+                                    <input type="number" id="quantity_${item}" name="quantity_${item}" min="1" placeholder="Qty">
+                                    <hr>
+                                </div>`;
+                        }
+                    });
+                    document.getElementById('menu-container').innerHTML = menuHTML;
+                })
+                .catch(error => console.error('Error loading menu:', error));
+        }
+        function updateDate() {
+            document.getElementById('date').textContent = new Date().toDateString() + ' - Menu';
+        }
         function submitOrder() {
-            const groupUrl = "https://chat.whatsapp.com/LlgVrotf14eDYFIXeiBuIx";  
+            const groupUrl = "https://wa.me/919994959363?text=";
             let message = "";
-
-            for (let i = 1; i <= 4; i++) {
-                const checkbox = document.getElementById(`item${i}`);
-                const label = document.querySelector(`label[for="item${i}"]`).innerText;
-                const quantityInput = document.getElementById(`quantity${i}`);
-                let quantity = quantityInput.value;
-
+            document.querySelectorAll('.item input[type="checkbox"]').forEach(checkbox => {
                 if (checkbox.checked) {
+                    const label = document.querySelector(`label[for="${checkbox.id}"]`).innerText;
+                    const quantityInput = document.getElementById(`quantity_${checkbox.id}`);
+                    let quantity = quantityInput.value;
                     if (!quantity) {
                         quantity = 1;
-                    }
+                    }                    
                     message += `${label}, Qty: ${quantity}\n`;
                 }
-            }
+            });
 
             const address = document.getElementById("address").value.trim();
             const notes = document.getElementById("notes").value.trim();
 
             if (message) {
                 if (address) {
-                    message += `Address: ${address}\n`;
+                    message += `Address: ${address}`;
+                }
+                else{
+                    alert("Please enter your house address.");
+                    return;
                 }
                 if (notes) {
-                    message += `Notes: ${notes}\n`;
+                    message += `\nNotes: ${notes}`;
                 }
-
-                // Copy the message to the clipboard
-                const textArea = document.createElement('textarea');
-                textArea.value = message;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-
-                // Redirect to WhatsApp group
-                window.location.href = groupUrl;
-
-                // Show a confirmation that the text is copied
-                alert("Your order details have been copied to the clipboard. Please paste it in the group chat!");
+                message = encodeURIComponent(message);
+                // Redirect to WhatsApp
+                window.location.href = groupUrl+message;
             } else {
                 alert("Please select at least one item and enter its quantity.");
             }
         }
+        window.onload = function() {
+            updateDate();
+            loadMenu();
+        };
     </script>
 </body>
 </html>
