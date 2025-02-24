@@ -105,6 +105,9 @@
             fetch('menu.csv?' + new Date().getTime()) // Appends a unique timestamp
                 .then(response => response.text())
                 .then(data => {
+                    if (data.trim() === '') {
+                        window.location.href = 'no_orders.html';
+                    }
                     const lines = data.split('\n');
                     let menuHTML = '';
                     lines.forEach(line => {
