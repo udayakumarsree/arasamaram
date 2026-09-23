@@ -1,0 +1,993 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+	<meta charset="utf-8">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+	<title>World Clocks — USA, Australia, Japan, Dubai</title>
+
+	<style>
+
+		:root{
+
+			--bg:#000000;
+
+			--card:#0f1113;
+
+			--muted:#ff9a57;
+
+			--accent:#99ee2b;
+
+			--glass: rgba(255,255,255,0.03);
+
+			--base-font-size: clamp(16px, 1.6vw, 20px);
+
+		}
+
+		*{
+			box-sizing:border-box;
+			-webkit-tap-highlight-color: transparent;
+		} 
+
+		html,body{
+			height:100%;
+			min-height:100vh;
+			min-height:100dvh;
+		}
+
+		body{
+
+			margin:0;
+
+			font-family: -apple-system, BlinkMacSystemFont, ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+
+			background: linear-gradient(180deg,#000 0%, #050505 100%);
+
+			color:#ffffff;
+
+			display:flex;
+
+			flex-direction:column;
+
+			align-items:center;
+
+			justify-content:flex-start;
+
+			padding:12px;
+
+			padding-top: calc(12px + env(safe-area-inset-top));
+
+			padding-bottom: calc(12px + env(safe-area-inset-bottom));
+
+			padding-left: calc(12px + env(safe-area-inset-left));
+
+			padding-right: calc(12px + env(safe-area-inset-right));
+
+			-webkit-font-smoothing:antialiased;
+
+			-moz-osx-font-smoothing:grayscale;
+
+			font-size:var(--base-font-size);
+
+			overflow-y:auto;
+
+		}
+
+
+
+		.ist-header{
+
+			display:flex;
+
+			width:100%;
+
+			max-width:1200px;
+
+			align-items:center;
+
+			justify-content:center;
+
+			padding:16px 12px;
+
+			margin-bottom:12px;
+
+			flex-wrap:wrap;
+
+			gap:6px;
+
+		}
+
+
+
+		.ist-header h3{
+
+			margin:0;
+
+			font-size:clamp(22px, 4vw, 32px);
+
+			font-weight:400;
+
+			letter-spacing:1px;
+
+			color:var(--accent);
+
+			text-align:center;
+
+			text-shadow:0 0 20px rgba(125,211,252,0.4);
+
+		}
+
+
+
+		.row{
+
+			display:flex;
+
+			gap:20px;
+
+			width:100%;
+
+			max-width:1200px;
+
+			overflow-x:auto;
+
+			overflow-y:hidden;
+
+			height: calc(100vh - 140px);
+
+			height: calc(100dvh - 140px);
+
+			align-items:flex-start;
+
+			padding:12px 6px;
+
+			flex-wrap:nowrap;
+
+			-webkit-overflow-scrolling: touch;
+
+		}
+
+
+
+		.country{
+
+			background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+
+			border: 1px solid rgba(255,255,255,0.04);
+
+			box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+
+			padding:12px 16px;
+
+			border-radius:10px;
+
+			min-width:180px;
+
+			max-height:100%;
+
+			overflow-y:auto;
+
+			display:flex;
+
+			flex-direction:column;
+
+			align-items:center;
+
+			gap:10px;
+
+			backdrop-filter: blur(6px);
+
+			-webkit-backdrop-filter: blur(6px);
+
+			flex:0 0 auto;
+
+			-webkit-overflow-scrolling: touch;
+
+		}
+
+
+
+		.country h2{
+
+			margin:4px 0 0 0;
+
+			font-size:clamp(16px, 2vw, 20px);
+
+			color:var(--accent);
+
+			letter-spacing:0.6px;
+
+			text-transform:uppercase;
+
+			font-weight:700;
+
+		}
+
+
+
+		.tz{
+
+			display:flex;
+
+			flex-direction:column;
+
+			align-items:center;
+
+			gap:6px;
+
+			width:100%;
+
+			padding:8px 6px;
+
+			border-radius:8px;
+
+			transition:transform .18s ease, background .18s ease;
+
+		}
+
+		.tz:hover, .tz:active{
+
+			transform:translateY(-2px);
+
+			background:var(--glass);
+
+		}
+
+
+
+		.tz .label{
+
+			color:var(--muted);
+
+			font-size:clamp(14px, 1.7vw, 20px);
+
+			text-align:center;
+
+		}
+
+
+
+		.tz .time{
+
+			color:#fff;
+
+			font-weight:600;
+
+			font-size:clamp(15px, 1.7vw, 20px);
+
+			letter-spacing:0.8px;
+
+			text-align:center;
+
+			display:flex;
+
+			flex-wrap:nowrap;
+
+			gap:8px;
+
+			align-items:center;
+
+		}
+
+
+
+		.tz .abbr{
+
+			color:#ffd400;
+
+			font-weight:700;
+
+			font-size:clamp(13px, 1.6vw, 18px);
+
+		}
+
+
+
+		.tz .date{
+
+			color:var(--muted);
+
+			font-size:clamp(13px, 1.6vw, 18px);
+
+		}
+
+
+
+		.tz .dstBadge{
+
+			background:linear-gradient(90deg,#ffb86b,#ff7a7a);
+
+			color:#081219;
+
+			font-weight:700;
+
+			font-size:12px;
+
+			padding:2px 6px;
+
+			border-radius:999px;
+
+			letter-spacing:0.6px;
+
+		}
+
+
+
+		.row::-webkit-scrollbar{height:8px}
+
+		.row::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.06);border-radius:8px}
+
+
+
+		@media (max-width:700px){
+
+			body{
+
+				padding:10px;
+
+				align-items:stretch;
+
+			}
+
+
+
+			.ist-header{
+
+				padding:10px 0 12px;
+
+				margin-bottom:8px;
+
+			}
+
+
+
+			.ist-header h3{
+
+				font-size:clamp(18px, 5vw, 24px);
+
+				line-height:1.2;
+
+			}
+
+
+
+			.row{
+
+				flex-direction:column;
+
+				gap:12px;
+
+				overflow-x:visible;
+
+				overflow-y:visible;
+
+				height:auto;
+
+				align-items:stretch;
+
+				padding:0;
+
+			}
+
+
+
+			.country{
+
+				min-width:0;
+
+				width:100%;
+
+				max-width:none;
+
+				padding:12px;
+
+			}
+
+
+
+			.country h2{
+
+				font-size:clamp(16px, 4vw, 20px);
+
+			}
+
+
+
+			.tz .label{
+
+				font-size:clamp(13px, 3.2vw, 16px);
+
+			}
+
+
+
+			.tz .time{
+
+				font-size:clamp(14px, 3.4vw, 18px);
+
+				justify-content:center;
+
+			}
+
+
+
+			.tz .abbr,
+
+			.tz .date{
+
+				font-size:clamp(12px, 3vw, 14px);
+
+			}
+
+		}
+
+
+
+	</style>
+
+</head>
+
+<body>
+
+	<div class="ist-header">
+
+		<h3>Local Time >>> &nbsp; </h3>
+
+		<h3 id="istClock">--:--:--</h3>
+
+	</div>
+
+
+
+	<div class="row" id="clockRow" aria-live="polite"></div>
+
+
+
+	<script>
+
+		// Data: country groups with timezone identifiers and human labels
+
+		const groups = [
+
+			{
+
+				country: 'USA',
+
+				zones: [
+
+					{id: 'America/Los_Angeles', label: 'Pacific (PST)'},
+
+					{id: 'America/Denver', label: 'Mountain (MST)'},
+
+					{id: 'America/Chicago', label: 'Central (CST)'},
+
+					{id: 'America/New_York', label: 'Eastern (EST)'}
+
+				]
+
+			},
+
+			{
+
+				country: 'Australia',
+
+				zones: [
+
+					{id: 'Australia/Perth', label: 'Perth (AWST)'},
+
+					{id: 'Australia/Darwin', label: 'Darwin (ACST)'},
+
+					{id: 'Australia/Adelaide', label: 'Adelaide (ACST)'},
+
+					{id: 'Australia/Sydney', label: 'Sydney (AEST)'}
+
+				]
+
+			},
+
+			{
+
+				country: 'Europe',
+
+				zones: [
+
+					{id: 'Europe/Dublin', label: 'Dublin (Irish)'},
+
+					{id: 'Europe/Amsterdam', label: 'Amsterdam (CET)'},
+
+					{id: 'Europe/Bucharest', label: 'Bucharest (EET)'},
+
+					{id: 'Europe/Moscow', label: 'Moscow (MSK)'}
+
+				]
+
+			},
+
+			{
+
+				country: 'Japan',
+
+				zones: [
+
+					{id: 'Asia/Tokyo', label: 'Tokyo (JST)'}
+
+				]
+
+			},
+
+			{
+
+				country: 'Dubai',
+
+				zones: [
+
+					{id: 'Asia/Dubai', label: 'Dubai (GST)'}
+
+				]
+
+			},
+
+			{
+
+				country: 'Malaysia',
+
+				zones: [
+
+					{id: 'Asia/Kuala_Lumpur', label: 'Kuala Lumpur (MYT)'}
+
+				]
+
+			}
+
+		];
+
+
+
+		const row = document.getElementById('clockRow');
+
+
+
+		// render structure
+
+		groups.forEach(group => {
+
+			// We'll render Dubai under Japan, so skip standalone Dubai rendering here
+
+			if (group.country === 'Dubai') return;
+
+			if (group.country === 'Malaysia') return;
+
+
+
+			const countryEl = document.createElement('section');
+
+			countryEl.className = 'country';
+
+			const h = document.createElement('h2');
+
+			h.textContent = group.country;
+
+			countryEl.appendChild(h);
+
+
+
+			// render the group's zones
+
+			group.zones.forEach(zone => {
+
+				const tz = document.createElement('div');
+
+				tz.className = 'tz';
+
+				tz.innerHTML = `
+
+					<div class="label">${zone.label}</div>
+
+					<div class="time" data-tz="${zone.id}">
+
+						<span class="timeStr">--:--:--</span>
+
+						<span class="abbr" aria-hidden="true"></span>
+
+						<span class="dstBadge" aria-hidden="true" style="display:none">DST</span>
+
+					</div>
+
+					<div class="date" aria-hidden="true">—</div>`;
+
+				countryEl.appendChild(tz);
+
+			});
+
+
+
+			// If this is Japan, append Dubai's zones below it
+
+			if (group.country === 'Japan'){
+
+				const dubaiGroup = groups.find(g => g.country === 'Dubai');
+
+				const malaysiaGroup = groups.find(g => g.country === 'Malaysia');
+
+				if (dubaiGroup){
+
+					const subH = document.createElement('h3');
+
+					subH.textContent = 'DUBAI';
+
+					// style the subheading to match visual hierarchy
+
+					subH.style.margin = '8px 0 0 0';
+
+					subH.style.fontSize = '20px';
+
+					subH.style.color = 'var(--accent)';
+
+					subH.style.fontWeight = '700';
+
+					countryEl.appendChild(subH);
+
+
+
+					dubaiGroup.zones.forEach(zone => {
+
+						const tz = document.createElement('div');
+
+						tz.className = 'tz';
+
+						tz.innerHTML = `
+
+							<div class="label">${zone.label}</div>
+
+							<div class="time" data-tz="${zone.id}">
+
+								<span class="timeStr">--:--:--</span>
+
+								<span class="abbr" aria-hidden="true"></span>
+
+								<span class="dstBadge" aria-hidden="true" style="display:none">DST</span>
+
+							</div>
+
+							<div class="date" aria-hidden="true">—</div>`;
+
+						countryEl.appendChild(tz);
+
+					});
+
+				}
+
+				if (malaysiaGroup){
+
+					const subH = document.createElement('h3');
+
+					subH.textContent = 'MALAYSIA';
+
+					// style the subheading to match visual hierarchy
+
+					subH.style.margin = '8px 0 0 0';
+
+					subH.style.fontSize = '20px';
+
+					subH.style.color = 'var(--accent)';
+
+					subH.style.fontWeight = '700';
+
+					countryEl.appendChild(subH);
+
+
+
+					malaysiaGroup.zones.forEach(zone => {
+
+						const tz = document.createElement('div');
+
+						tz.className = 'tz';
+
+						tz.innerHTML = `
+
+							<div class="label">${zone.label}</div>
+
+							<div class="time" data-tz="${zone.id}">
+
+								<span class="timeStr">--:--:--</span>
+
+								<span class="abbr" aria-hidden="true"></span>
+
+								<span class="dstBadge" aria-hidden="true" style="display:none">DST</span>
+
+							</div>
+
+							<div class="date" aria-hidden="true">—</div>`;
+
+						countryEl.appendChild(tz);
+
+					});
+
+				}
+
+			}
+
+
+
+			row.appendChild(countryEl);
+
+		});
+
+
+
+			// Helpers to work with arbitrary time zones in WebKit / iOS Safari
+
+			function partsFor(date, timeZone){
+
+				const fmt = new Intl.DateTimeFormat('en-US', {
+
+					timeZone,
+
+					hourCycle: 'h23',
+
+					year: 'numeric', month: '2-digit', day: '2-digit',
+
+					hour: '2-digit', minute: '2-digit', second: '2-digit',
+
+					timeZoneName: 'short'
+
+				});
+
+				return fmt.formatToParts(date);
+
+			}
+
+
+
+			function getOffsetMinutes(date, timeZone){
+
+				// Use formatToParts to get the local date/time for that timezone
+
+				const parts = partsFor(date, timeZone);
+
+				const p = {};
+
+				parts.forEach(part => {
+
+					if (part.type !== 'literal') {
+
+						p[part.type] = part.value.replace(/[\u200e\u200f\u202f]/g, '');
+
+					}
+
+				});
+
+				// build UTC milliseconds for the wall-clock values
+
+				const year = Number(p.year);
+
+				const month = Number(p.month) - 1;
+
+				const day = Number(p.day);
+
+				let hour = Number(p.hour);
+
+				if (hour === 24) hour = 0; // Guard against WebKit h24 midnight edge case
+
+				const minute = Number(p.minute);
+
+				const second = Number(p.second);
+
+				const utcForLocal = Date.UTC(year, month, day, hour, minute, second);
+
+				return Math.round((utcForLocal - date.getTime()) / 60000);
+
+			}
+
+
+
+			function getTZAbbreviation(date, timeZone){
+
+				const parts = partsFor(date, timeZone);
+
+				const tzPart = parts.find(p => p.type === 'timeZoneName');
+
+				return tzPart ? tzPart.value.replace(/[\u200e\u200f\u202f]/g, '') : '';
+
+			}
+
+
+
+			function isDSTNow(timeZone){
+
+				const now = new Date();
+
+				const year = now.getUTCFullYear();
+
+				const jan = new Date(Date.UTC(year,0,1,12,0,0));
+
+				const jul = new Date(Date.UTC(year,6,1,12,0,0));
+
+				const offNow = getOffsetMinutes(now, timeZone);
+
+				const offJan = getOffsetMinutes(jan, timeZone);
+
+				const offJul = getOffsetMinutes(jul, timeZone);
+
+
+
+				if (offJan === offJul) return false; // no DST observed
+
+
+
+				// If Jan offset < Jul offset then northern-hemisphere pattern: Jul is DST
+
+				if (offJan < offJul) return offNow === offJul;
+
+				// else Jan offset > Jul offset -> southern-hemisphere pattern: Jan is DST
+
+				return offNow === offJan;
+
+			}
+
+			
+
+			// update IST header clock
+
+			function updateISTClock(){
+
+				const istClock = document.getElementById('istClock');
+
+				if (istClock){
+
+					const now = new Date();
+
+					let dateStr = new Intl.DateTimeFormat('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', timeZone: 'Asia/Kolkata' }).format(now);
+
+					let timeStr = new Intl.DateTimeFormat('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23', timeZone: 'Asia/Kolkata' }).format(now);
+
+					istClock.textContent = `${dateStr} ${timeStr}`;
+
+				}
+
+			}
+
+
+
+			// update times every second and show TZ abbreviation + DST badge
+
+			function updateTimes(){
+
+				const timeEls = document.querySelectorAll('[data-tz]');
+
+				const now = new Date();
+
+				timeEls.forEach(el => {
+
+					const tz = el.getAttribute('data-tz');
+
+					try{
+
+						let timeStr = new Intl.DateTimeFormat('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23', timeZone: tz }).format(now);
+
+						timeStr = timeStr.replace(/[\u200e\u200f]/g, '').replace(/\s?(AM|PM|am|pm)$/i, '\u00A0$1');
+
+						const abbr = getTZAbbreviation(now, tz);
+
+						// date string for this timezone
+
+						const dateStr = new Intl.DateTimeFormat('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', timeZone: tz }).format(now);
+
+						// compute GMT offset like GMT+05:30
+
+						function formatGMTOffset(date, timeZone){
+
+							// getOffsetMinutes returns minutes localTime - UTC (positive when local is ahead)
+
+							const minutes = getOffsetMinutes(date, timeZone);
+
+							const sign = minutes >= 0 ? '+' : '-';
+
+							const abs = Math.abs(minutes);
+
+							const hh = String(Math.floor(abs/60));
+
+							const mm = String(abs%60).padStart(2,'0');
+
+							return mm != '00' ? `GMT${sign}${hh}:${mm}` : `GMT${sign}${hh}`;
+
+						}
+
+						const dstActive = isDSTNow(tz);
+
+
+
+						const timeSpan = el.querySelector('.timeStr');
+
+						const abbrSpan = el.querySelector('.abbr');
+
+						const badge = el.querySelector('.dstBadge');
+
+
+
+						if (timeSpan) {
+
+							timeSpan.textContent = timeStr;
+
+							timeSpan.style.whiteSpace = 'nowrap';
+
+						}
+
+						if (abbrSpan) {
+
+							// For USA group show GMT offset instead of short timezone name
+
+							const countryEl = el.closest('.country');
+
+							const countryName = countryEl ? (countryEl.querySelector('h2')?.textContent || '') : '';
+
+							if (countryName === 'USA'){
+
+								abbrSpan.textContent = formatGMTOffset(now, tz);
+
+							} else {
+
+								abbrSpan.textContent = abbr ? `(${abbr})` : '';
+
+							}
+
+						}
+
+						// update date element
+
+						const dateEl = el.parentElement.querySelector('.date');
+
+						if (dateEl) dateEl.textContent = dateStr;
+
+						if (badge) {
+
+							if (dstActive) { badge.style.display = 'inline-block'; }
+
+							else { badge.style.display = 'none'; }
+
+						}
+
+					}catch(e){
+
+						const timeSpan = el.querySelector('.timeStr');
+
+						if (timeSpan) timeSpan.textContent = '—';
+
+					}
+
+				});
+
+			}
+
+
+
+			updateISTClock();
+
+			updateTimes();
+
+			setInterval(() => {
+
+				updateISTClock();
+
+				updateTimes();
+
+			}, 1000);
+
+
+
+		// Accessibility: focus first country for keyboard users
+
+		row.querySelector('.country')?.setAttribute('tabindex','0');
+
+	</script>
+
+
+
+</body>
+
+</html>
+
